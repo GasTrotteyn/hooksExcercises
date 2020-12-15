@@ -6,12 +6,7 @@ import "./IngredientForm.css";
 const IngredientForm = React.memo((props) => {
     const [title, setTitle] = useState("");
     const [amount, setAmount] = useState("");
-    // useEffect(() => {
-    //     console.log("vengo del useefect salgo siempre");
-    // });
-    // useEffect(() => {
-    //     console.log("vengo del useefect salgo solo si cambia la cantidad");
-    // }, [amount]);
+    console.log("rendering ingForm");
 
     const submitHandler = (event) => {
         event.preventDefault();

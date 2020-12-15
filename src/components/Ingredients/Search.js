@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 import Card from "../UI/Card";
 import "./Search.css";
@@ -6,43 +6,39 @@ import "./Search.css";
 const Search = React.memo((props) => {
     const { onFilter } = props;
     const [search, setSearch] = useState("");
-    // useEffect(() => {
-    //     const query =
-    //         search.length === 0 ? "" : `?orderBy="title"&equalTo="${search}"`;
-    //     fetch(
-    //         "https://react-hooks-34dd9.firebaseio.com/ingredients.json" + query
-    //     )
-    //         .then((response) => response.json())
-    //         .then((responseData) => {
-    //             const newArray = [];
-    //             for (const key in responseData) {
-    //                 newArray.push({
-    //                     id: key,
-    //                     amount: responseData[key].amount,
-    //                     title: responseData[key].title,
-    //                 });
-    //             }
-    //             onFilter(newArray);
-    //         });
-    // }, [search, onFilter]);
+    const inputRef = useRef();
 
     const filter = (event) => {
         setSearch(event.target.value);
     };
 
     useEffect(() => {
-        console.log(search);
-        const query =
-            search.length === 0 ? "" : `?orderBy="title"&equalTo="${search}"`;
-        onFilter(query);
-    }, [search, onFilter]);
+        const timer = setTimeout(() => {
+            if (search === inputRef.current.value) {
+                console.log(search);
+                const query =
+                    search.length === 0
+                        ? ""
+                        : `?orderBy="title"&equalTo="${search}"`;
+                onFilter(query);
+            }
+        }, 500);
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [search, onFilter, inputRef]);
 
     return (
         <section className="search">
             <Card>
                 <div className="search-input">
                     <label>Filter by Title</label>
-                    <input type="text" value={search} onChange={filter} />
+                    <input
+                        type="text"
+                        value={search}
+                        onChange={filter}
+                        ref={inputRef}
+                    />
                 </div>
             </Card>
         </section>
